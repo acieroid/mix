@@ -1,0 +1,17 @@
+env = Environment()
+
+debug = ARGUMENTS.get('DEBUG', '1')
+cflags = ARGUMENTS.get('CFLAGS', '')
+ldflags = ARGUMENTS.get('LDFLAGS', '')
+oss_include_dir = ARGUMENTS.get('OSS_INCLUDE_DIR', '/usr/local/lib/oss/include')
+libmix_include_dir = ARGUMENTS.get('LIBMIX_INCLUDE_DIR', '../../libmix/include')
+libmix_lib_dir = ARGUMENTS.get('LIBMIX_LIB_DIR', '../../libmix/src/')
+
+if debug == '1':
+    cflags += '-g '
+cflags += ('-Iinclude -I' + oss_include_dir + ' -I' + libmix_include_dir + ' ')
+
+sources = ['main.c']
+libs = ['ncursesw', 'mix']
+mix = env.Program(target = 'mix', source = sources,
+                  CFLAGS = cflags, LIBS = libs, LIBPATH = libmix_lib_dir)
