@@ -1,3 +1,5 @@
+#include "control.h"
+
 #include <stdio.h>
 #include <ncurses.h>
 
@@ -17,6 +19,10 @@ void exit_ncurses()
 int main(int argc, char *argv[])
 {
   init_ncurses();
+  printw("cc");
+  refresh();
+  Control *control = control_new(NULL, 1, 1, 10);
+  control_draw(control);
   getch();
 
   exit_ncurses();

@@ -4,18 +4,24 @@
 #include <ncurses.h>
 #include <libmix.h>
 
+#define CONTROL_WIDTH 3
+#define FILL_CHARACTER ACS_CKBOARD /* or "#" */
+
 /**
  * A control is the GUI element that controls an extension
  */
 typedef struct {
   WINDOW *win;
   MixExtension *ext;
+  int x;
+  int y;
+  int height;
 } Control;
 
 /**
  * @return a newly allocated control
  */
-Control *control_new(MixExtensions *ext);
+Control *control_new(MixExtension *ext, int x, int y, int height);
 
 /**
  * free a control
