@@ -32,12 +32,11 @@ void control_update(Control *control)
 
 void control_draw(Control *control)
 {
+  int y;
   assert(control != NULL);
 
-  int x, y;
-  x = control->x;
-  for (y = control->y + control->height - 3; y > control->y - 1; y--) {
-    mvwaddch(control->win, y, x, FILL_CHARACTER);
+  for (y = control->height-2; y > 0; y--) {
+    mvwaddch(control->win, y, 1, FILL_CHARACTER);
   }
   wrefresh(control->win);
 }

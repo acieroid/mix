@@ -19,9 +19,8 @@ void exit_ncurses()
 int main(int argc, char *argv[])
 {
   init_ncurses();
-  printw("cc");
   refresh();
-  Control *control = control_new(NULL, 1, 1, 10);
+  Control *control = control_new(NULL, 10, 0, LINES);
   control_draw(control);
   getch();
 
