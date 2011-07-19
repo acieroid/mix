@@ -9,7 +9,8 @@
 #include <libmix.h>
 
 #define CONTROL_WIDTH 3
-#define FILL_CHARACTER ACS_CKBOARD /* or "#" */
+#define FILL_CHARACTER ACS_CKBOARD
+#define CLEAR_CHARACTER ' '
 #define INCREASE_STEP 1
 #define DECREASE_STEP -1
 

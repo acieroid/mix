@@ -65,19 +65,24 @@ void control_draw(Control *control)
          (float) mix_extension_get_max_value(control->ext)) *
     (control->height-2);
   
-  for (y = control->height-2; y > control->height-2-val; y--) {
+  for (y = control->height-2; y > 0; y--) {
     percent = 100 - (((float) y / (float) (control->height-2)) * 100);
-    if (percent <= 25)
-      wattron(control->win, COLOR_PAIR(GREEN_PAIR));
-    else if (percent >= 75)
-      wattron(control->win, COLOR_PAIR(RED_PAIR));
-    else
-      wattron(control->win, COLOR_PAIR(WHITE_PAIR));
+    if (y > control->height-2-val) {
+      if (percent <= 25)
+        wattron(control->win, COLOR_PAIR(GREEN_PAIR));
+      else if (percent >= 75)
+        wattron(control->win, COLOR_PAIR(RED_PAIR));
+      else
+        wattron(control->win, COLOR_PAIR(WHITE_PAIR));
 
-    mvwaddch(control->win, y, 1, FILL_CHARACTER);
+      mvwaddch(control->win, y, 1, FILL_CHARACTER);
+    }
+    else {
+      wattroff(control->win, COLOR_PAIR(GREEN_PAIR));
+      wattroff(control->win, COLOR_PAIR(WHITE_PAIR));
+      wattroff(control->win, COLOR_PAIR(RED_PAIR));
+      mvwaddch(control->win, y, 1, CLEAR_CHARACTER);
+    }
   }
-  wattroff(control->win, COLOR_PAIR(GREEN_PAIR));
-  wattroff(control->win, COLOR_PAIR(WHITE_PAIR));
-  wattroff(control->win, COLOR_PAIR(RED_PAIR));
   wrefresh(control->win);
 }
