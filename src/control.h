@@ -1,3 +1,7 @@
+/**
+ * @file control.h
+ * @brief Implements the controls
+ */
 #ifndef CONTROL_H
 #define CONTROL_H
 
@@ -6,6 +10,8 @@
 
 #define CONTROL_WIDTH 3
 #define FILL_CHARACTER ACS_CKBOARD /* or "#" */
+#define INCREASE_STEP 1
+#define DECREASE_STEP -1
 
 /**
  * A control is the GUI element that controls an extension
@@ -32,6 +38,21 @@ void control_free(Control *control);
  * Update the value of a control
  */
 void control_update(Control *control);
+
+/**
+ * Change the value of a control of @step
+ */
+void control_change_value(Control *control, int step);
+
+/**
+ * Increase the value of a control
+ */
+void control_increase(Control *control);
+
+/**
+ * Decrease the value of a control
+ */
+void control_decrease(Control *control);
 
 /**
  * Draw a control on the screen

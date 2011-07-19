@@ -30,6 +30,31 @@ void control_update(Control *control)
   mix_extension_update_value(control->ext);
 }
 
+void control_change_value(Control *control, int step)
+{
+  MixExtension *ext;
+  assert(control != NULL);
+  ext = control->ext;
+  
+  if (mix_extension_is_stereo(ext))
+    mix_extension_set_stereo_value(ext,
+                                   mix_extension_get_left_value(ext) + step,
+                                   mix_extension_get_right_value(ext) + step);
+  else
+    mix_extension_set_value(ext,
+                            mix_extension_get_value(ext) + step);
+}
+
+void control_increase(Control *control)
+{
+  control_change_value(control, INCREASE_STEP);
+}
+
+void control_decrease(Control *control)
+{
+  control_change_value(control, DECREASE_STEP);
+}
+
 void control_draw(Control *control)
 {
   int y, val;
