@@ -38,12 +38,11 @@ int main(int argc, char *argv[])
     ch = getch();
     if (ch == KEY_UP) {
       control_increase(control);
-      control_update(control);
     }
     else if (ch == KEY_DOWN) {
       control_decrease(control);
-      control_update(control);
     }
+    control_update(control);
     control_draw(control);
   }
 
