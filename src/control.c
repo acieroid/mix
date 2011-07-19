@@ -56,6 +56,18 @@ void control_decrease(Control *control)
   control_change_value(control, DECREASE_STEP);
 }
 
+void control_set_color(Control *control, int color)
+{
+  assert(control != NULL);
+  wattron(control->win, COLOR_PAIR(color));
+}
+
+void control_clear_color(Control *control)
+{
+  assert(control != NULL);
+  wattrset(control->win, 0); /* clear all the attributes */
+}
+  
 void control_draw(Control *control)
 {
   int y, val, percent;
@@ -68,19 +80,11 @@ void control_draw(Control *control)
   for (y = control->height-2; y > 0; y--) {
     percent = 100 - (((float) y / (float) (control->height-2)) * 100);
     if (y > control->height-2-val) {
-      if (percent <= 25)
-        wattron(control->win, COLOR_PAIR(GREEN_PAIR));
-      else if (percent >= 75)
-        wattron(control->win, COLOR_PAIR(RED_PAIR));
-      else
-        wattron(control->win, COLOR_PAIR(WHITE_PAIR));
-
+      control_set_color(control, (percent < 25) ? GREEN : ((percent > 75) ? RED : WHITE));
       mvwaddch(control->win, y, 1, FILL_CHARACTER);
     }
     else {
-      wattroff(control->win, COLOR_PAIR(GREEN_PAIR));
-      wattroff(control->win, COLOR_PAIR(WHITE_PAIR));
-      wattroff(control->win, COLOR_PAIR(RED_PAIR));
+      control_clear_color(control);
       mvwaddch(control->win, y, 1, CLEAR_CHARACTER);
     }
   }

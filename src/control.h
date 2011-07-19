@@ -56,6 +56,16 @@ void control_increase(Control *control);
 void control_decrease(Control *control);
 
 /**
+ * Set a current color for the control
+ */
+void control_set_color(Control *control, int color);
+
+/**
+ * Clear the color of the control
+ */
+void control_clear_color(Control *control);
+
+/**
  * Draw a control on the screen
  */
 void control_draw(Control *control);
