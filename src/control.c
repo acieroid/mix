@@ -32,10 +32,14 @@ void control_update(Control *control)
 
 void control_draw(Control *control)
 {
-  int y;
+  int y, val;
   assert(control != NULL);
 
-  for (y = control->height-2; y > 0; y--) {
+  val = ((float) mix_extension_get_value(control->ext) /
+         (float) mix_extension_get_max_value(control->ext)) *
+    (control->height-2);
+  
+  for (y = control->height-2; y > control->height-2-val; y--) {
     mvwaddch(control->win, y, 1, FILL_CHARACTER);
   }
   wrefresh(control->win);
