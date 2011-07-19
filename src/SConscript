@@ -11,7 +11,7 @@ if debug == '1':
     cflags += '-g '
 cflags += ('-Iinclude -I' + oss_include_dir + ' -I' + libmix_include_dir + ' ')
 
-sources = ['main.c', 'control.c']
+sources = ['main.c', 'control.c', 'colors.c']
 libs = ['ncursesw', 'mix']
 mix = env.Program(target = 'mix', source = sources,
                   CFLAGS = cflags, LIBS = libs, LIBPATH = libmix_lib_dir)

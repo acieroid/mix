@@ -1,4 +1,5 @@
 #include "control.h"
+#include "colors.h"
 
 #include <assert.h>
 
@@ -57,7 +58,7 @@ void control_decrease(Control *control)
 
 void control_draw(Control *control)
 {
-  int y, val;
+  int y, val, percent;
   assert(control != NULL);
 
   val = ((float) mix_extension_get_value(control->ext) /
@@ -65,7 +66,18 @@ void control_draw(Control *control)
     (control->height-2);
   
   for (y = control->height-2; y > control->height-2-val; y--) {
+    percent = 100 - (((float) y / (float) (control->height-2)) * 100);
+    if (percent <= 25)
+      wattron(control->win, COLOR_PAIR(GREEN_PAIR));
+    else if (percent >= 75)
+      wattron(control->win, COLOR_PAIR(RED_PAIR));
+    else
+      wattron(control->win, COLOR_PAIR(WHITE_PAIR));
+
     mvwaddch(control->win, y, 1, FILL_CHARACTER);
   }
+  wattroff(control->win, COLOR_PAIR(GREEN_PAIR));
+  wattroff(control->win, COLOR_PAIR(WHITE_PAIR));
+  wattroff(control->win, COLOR_PAIR(RED_PAIR));
   wrefresh(control->win);
 }

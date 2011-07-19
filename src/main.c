@@ -1,4 +1,5 @@
 #include "control.h"
+#include "colors.h"
 
 #include <stdio.h>
 #include <ncurses.h>
@@ -6,6 +7,7 @@
 void init_ncurses()
 {
   initscr();
+  init_colors();
   cbreak();
   keypad(stdscr, TRUE);
   noecho();
