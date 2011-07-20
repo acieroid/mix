@@ -1,4 +1,5 @@
 #include "colors.h"
+#include "config.h"
 
 void init_colors()
 {

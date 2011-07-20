@@ -8,12 +8,6 @@
 #include <ncurses.h>
 #include <libmix.h>
 
-#define CONTROL_WIDTH 3
-#define FILL_CHARACTER ACS_CKBOARD
-#define CLEAR_CHARACTER ' '
-#define INCREASE_STEP 1
-#define DECREASE_STEP -1
-
 /**
  * A control is the GUI element that controls an extension
  */
@@ -54,6 +48,11 @@ void control_increase(Control *control);
  * Decrease the value of a control
  */
 void control_decrease(Control *control);
+
+/**
+ * Set the mute value of a control (1 = muted, 2 = unmuted)
+ */
+void control_mute(Control *control, int muted);
 
 /**
  * Set a current color for the control

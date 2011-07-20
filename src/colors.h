@@ -7,10 +7,6 @@
 
 #include <ncurses.h>
 
-#define GREEN 1
-#define WHITE 2
-#define RED 3
-
 /**
  * Init everything related to the colors
  */

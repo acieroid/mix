@@ -1,4 +1,5 @@
 #include "control.h"
+#include "group.h"
 #include "colors.h"
 
 #include <stdio.h>
@@ -26,26 +27,34 @@ int main(int argc, char *argv[])
   MixAPIFD fd;
   MixMixer *mixer;
   MixExtension *ext;
+  MixGroup *mixgroup;
+
   fd = mix_open_dev("/dev/mixer");
   mixer = mix_get_mixer(fd, 0);
-  ext = mix_mixer_find_extension(mixer, "vmix0-outvol");
+  /*ext = mix_mixer_find_extension(mixer, "vmix0-outvol");*/
+  mixgroup = mix_mixer_find_group(mixer, "vmix0");
+
   init_ncurses();
   refresh();
-  Control *control = control_new(ext, 0, 0, LINES);
-  control_draw(control);
+  /*Control *control = control_new(ext, 0, 0, LINES);*/
+  /*control_draw(control);*/
+  Group *group = group_new(mixgroup, 0, 0, LINES);
+  group_draw(group);
 
   while (ch != QUIT_KEY) {
     ch = getch();
     if (ch == KEY_UP) {
-      control_increase(control);
+      group_increase(group);
     }
     else if (ch == KEY_DOWN) {
-      control_decrease(control);
+      group_decrease(group);
     }
-    control_update(control);
-    control_draw(control);
+    group_update(group);
+    group_draw(group);
   }
 
+  group_free(group);
+  mix_mixer_free(mixer);
   exit_ncurses();
   return 0;
 }
