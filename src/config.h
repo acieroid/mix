@@ -3,6 +3,9 @@
  * @brief Contains all the constant definitions
  */
 
+#ifndef CONFIG_H
+#define CONFIG_H
+
 #define GREEN 1
 #define WHITE 2
 #define RED 3
@@ -18,3 +21,11 @@
 
 #define INCREASE_STEP 1
 #define DECREASE_STEP -1
+
+#define QUIT_KEY 'q'
+#define INCREASE_KEY KEY_UP
+#define DECREASE_KEY KEY_DOWN
+#define SELECT_LEFT_KEY KEY_LEFT
+#define SELECT_RIGHT_KEY KEY_RIGHT
+
+#endif /* CONFIG_H */

@@ -39,6 +39,11 @@ void manager_select_left(Manager *manager);
 void manager_select_right(Manager *manager);
 
 /**
+ * Handle a key press
+ */
+void manager_key_pressed(Manager *manager, int key);
+
+/**
  * Draw each group and extensions of this manager
  */
 void manager_draw(Manager *manager);

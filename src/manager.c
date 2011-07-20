@@ -61,6 +61,27 @@ void manager_select_right(Manager *manager)
   }
 }
 
+void manager_key_pressed(Manager *manager, int key)
+{
+  assert(manager != NULL);
+  switch (key) {
+  case SELECT_LEFT_KEY:
+    manager_select_left(manager);
+    break;
+  case SELECT_RIGHT_KEY:
+    manager_select_right(manager);
+    break;
+  case INCREASE_KEY:
+    group_increase(manager->selected);
+    break;
+  case DECREASE_KEY:
+    group_decrease(manager->selected);
+    break;
+  default:
+    break;
+  }
+}
+
 void manager_draw(Manager *manager)
 {
   MixList *iterator;

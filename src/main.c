@@ -5,8 +5,6 @@
 #include <stdio.h>
 #include <ncurses.h>
 
-#define QUIT_KEY 'q'
-
 void init_ncurses()
 {
   initscr();
@@ -31,26 +29,15 @@ int main(int argc, char *argv[])
 
   fd = mix_open_dev("/dev/mixer");
   mixer = mix_get_mixer(fd, 0);
-  /*ext = mix_mixer_find_extension(mixer, "vmix0-outvol");*/
-  mixgroup = mix_mixer_find_group(mixer, "jack.pink");
+  /* TODO: create a manager for each mixer, not only the first one */
+  manager = manager_new(mixer);
 
   init_ncurses();
   refresh();
-  /*Control *control = control_new(ext, 0, 0, LINES);*/
-  /*control_draw(control);*/
-  Group *group = group_new(mixgroup, 1, 1, LINES);
-  group_draw(group);
 
   while (ch != QUIT_KEY) {
     ch = getch();
-    if (ch == KEY_UP) {
-      group_increase(group);
-    }
-    else if (ch == KEY_DOWN) {
-      group_decrease(group);
-    }
-    group_update(group);
-    group_draw(group);
+    manager_key_pressed(ch);
   }
 
   group_free(group);
