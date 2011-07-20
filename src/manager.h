@@ -5,6 +5,8 @@
 #ifndef MANAGER_H
 #define MANAGER_H
 
+#include "group.h"
+
 #include <ncurses.h>
 #include <libmix.h>
 

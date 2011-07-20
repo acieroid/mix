@@ -66,3 +66,9 @@ void group_draw(Group *group)
   if (group->mute != NULL)
     control_draw(group->mute);
 }
+
+char *group_get_name(Group *group)
+{
+  assert(group != NULL);
+  return mix_group_get_name(group->group);
+}

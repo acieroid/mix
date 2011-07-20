@@ -57,5 +57,10 @@ void group_unmute(Group *group);
  */
 void group_draw(Group *group);
 
+/**
+ * @return the name of this group
+ */
+char *group_get_name(Group *group);
+
 
 #endif

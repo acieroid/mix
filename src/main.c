@@ -1,6 +1,5 @@
-#include "control.h"
-#include "group.h"
-#include "colors.h"
+#include "manager.h"
+#include "config.h"
 
 #include <stdio.h>
 #include <ncurses.h>
@@ -24,8 +23,7 @@ int main(int argc, char *argv[])
   int ch = 0;
   MixAPIFD fd;
   MixMixer *mixer;
-  MixExtension *ext;
-  MixGroup *mixgroup;
+  Manager *manager;
 
   fd = mix_open_dev("/dev/mixer");
   mixer = mix_get_mixer(fd, 0);
@@ -37,10 +35,11 @@ int main(int argc, char *argv[])
 
   while (ch != QUIT_KEY) {
     ch = getch();
-    manager_key_pressed(ch);
+    manager_key_pressed(manager, ch);
+    manager_draw(manager);
   }
 
-  group_free(group);
+  manager_free(manager);
   mix_mixer_free(mixer);
   exit_ncurses();
   return 0;

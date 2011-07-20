@@ -1,6 +1,7 @@
 #include "manager.h"
 #include "group.h"
 #include "control.h"
+#include "config.h"
 
 #include <assert.h>
 
@@ -10,13 +11,12 @@ Manager *manager_new(MixMixer *mixer)
   Group *group;
   Manager *manager = malloc(sizeof(*manager));
   assert(manager != NULL);
-  assert(groups_str != NULL);
 
   /* create the groups */
   manager->groups = NULL;
   manager->selected = NULL;
-  mix_list_foreach(iterator, mix_mixer_get_groups(mixer)) {
-    group = group_new(iterator->data, x, 1, LINES-1);
+  mix_foreach(iterator, mix_mixer_get_groups(mixer)) {
+    group = group_new(iterator->data, 0, 1, LINES-1);
     if (manager->selected == NULL)
       manager->selected = group; /* select the first group */
     mix_list_prepend(manager->groups, (void *) group);
@@ -91,7 +91,7 @@ void manager_draw(Manager *manager)
   assert(manager != NULL);
   /* Draw the list of groups */
   move(0, 0);
-  mix_list_foreach(iterator, manager->groups) {
+  mix_foreach(iterator, manager->groups) {
     /* TODO: draw only until we go to the next line */
     group = iterator->data;
     if (group == manager->selected)
