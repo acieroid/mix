@@ -2,4 +2,5 @@
  * @file manager.h
  * @brief Implements the group and control manager
  */
-#ifndef
+#ifndef MANAGER_H
+#define MANAGER_H

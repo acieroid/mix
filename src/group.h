@@ -20,7 +20,7 @@ typedef struct {
 /**
  * @return a newly allocated group
  */
-Group *group_new(MixGroup *group, int height, int x, int y);
+Group *group_new(MixGroup *group, int x, int y, int height);
 
 /**
  * Free a group

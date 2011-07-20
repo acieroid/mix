@@ -1,7 +1,7 @@
 #include "group.h"
 #include "config.h"
 
-Group *group_new(MixGroup *mixgroup, int height, int x, int y)
+Group *group_new(MixGroup *mixgroup, int x, int y, int height)
 {
   MixList *iterator;
   MixExtension *ext;
@@ -58,7 +58,6 @@ void group_mute(Group *group, int muted)
   if (group->mute != NULL)
     control_mute(group->mute, muted);
 }
-
 
 void group_draw(Group *group)
 {
