@@ -25,12 +25,12 @@ int main(int argc, char *argv[])
   MixMixer *mixer;
   Manager *manager;
 
+  init_ncurses();
   fd = mix_open_dev("/dev/mixer");
   mixer = mix_get_mixer(fd, 0);
   /* TODO: create a manager for each mixer, not only the first one */
   manager = manager_new(mixer);
-
-  init_ncurses();
+  manager_draw(manager);
   refresh();
 
   while (ch != QUIT_KEY) {

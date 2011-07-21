@@ -5,6 +5,7 @@
 
 #include <assert.h>
 
+#include <stdio.h>
 Manager *manager_new(MixMixer *mixer)
 {
   MixList *iterator;
@@ -16,11 +17,13 @@ Manager *manager_new(MixMixer *mixer)
   manager->groups = NULL;
   manager->selected = NULL;
   mix_foreach(iterator, mix_mixer_get_groups(mixer)) {
+    printw("alo");
     group = group_new(iterator->data, 0, 1, LINES-1);
     if (manager->selected == NULL)
       manager->selected = group; /* select the first group */
-    mix_list_prepend(manager->groups, (void *) group);
+    manager->groups = mix_list_prepend(manager->groups, (void *) group);
   }
+  manager->groups = mix_list_reverse(manager->groups);
 
   return manager;
 }
@@ -42,6 +45,7 @@ void manager_select_left(Manager *manager)
         return; /* the most-left element is already selected */
       else
         manager->selected = prev;
+      break;
     }
     prev = iterator->data;
   }
@@ -57,6 +61,7 @@ void manager_select_right(Manager *manager)
         return; /* the most-right element is already selected */
       else
         manager->selected = iterator->next->data;
+      break;
     }
   }
 }
@@ -89,6 +94,7 @@ void manager_draw(Manager *manager)
   int pos = 0;
 
   assert(manager != NULL);
+
   /* Draw the list of groups */
   move(0, 0);
   mix_foreach(iterator, manager->groups) {
