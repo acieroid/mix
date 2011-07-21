@@ -102,19 +102,19 @@ void control_draw(Control *control)
   if (control->win != NULL) {
     if (mix_extension_is_mute(ext)) {
       if (mix_extension_muted(ext))
-        mvwaddch(control->win, 1, 1, MUTED_CHARACTER);
+        mvwaddch(control->win, control->height-4, 1, MUTED_CHARACTER);
       else
-        mvwaddch(control->win, 1, 1, UNMUTED_CHARACTER);
+        mvwaddch(control->win, control->height-4, 1, UNMUTED_CHARACTER);
     }
     else if (mix_extension_is_slider(ext)) {
       box(control->win, 0, 0);
       val = ((float) mix_extension_get_value(control->ext) /
              (float) mix_extension_get_max_value(control->ext)) *
-        (control->height-2);
+        (control->height-4);
 
       for (y = control->height-4; y > 0; y--) {
         percent = 100 - (((float) y / (float) (control->height-2)) * 100);
-        if (y > control->height-2-val) {
+        if (y > control->height-4-val) {
           control_set_color(control, (percent < 25) ? GREEN : ((percent > 75) ? RED : WHITE));
           mvwaddch(control->win, y, 1, FILL_CHARACTER);
         }
