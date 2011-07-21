@@ -3,22 +3,25 @@
 
 Group *group_new(MixGroup *mixgroup, int x, int y, int height)
 {
+  int most_right_x = 0;
   MixList *iterator;
   MixExtension *ext;
+  Control *control;
   Group *group = malloc(sizeof(*group));
   assert(group != NULL);
   group->group = mixgroup;
-  group->win = newwin(height, GROUP_WIDTH, y, x);
 
-  group->mute = NULL;
-  group->slider = NULL;
+  group->controls = NULL;
   mix_foreach(iterator, mix_group_get_extensions(mixgroup)) {
     ext = iterator->data;
-    if (mix_extension_is_mute(ext) && group->mute == NULL)
-      group->mute = control_new(ext, x, y, height-1);
-    else if (mix_extension_is_slider(ext) && group->slider == NULL)
-      group->slider = control_new(ext, x, height-1, 1);
+    control = control_new(ext, most_right_x, y, height);
+    most_right_x += control_width(control) + 1;
+
+    group->controls = mix_list_prepend(group->controls, (void *) control);
   }
+  group->controls = mix_list_reverse(group->controls);
+
+  group->win = newwin(height, most_right_x, y, x);
   return group;
 }
 
@@ -26,45 +29,33 @@ void group_free(Group *group)
 {
   assert(group != NULL);
   delwin(group->win);
-  if (group->slider != NULL)
-    control_free(group->slider);
-  if (group->mute != NULL)
-    control_free(group->mute);
+  mix_list_free(group->controls, (MixFreeFunc) control_free);
   free(group);
 }
 
 void group_update(Group *group)
 {
-  if (group->slider != NULL)
-    control_update(group->slider);
-  if (group->mute != NULL)
-    control_update(group->mute);
+  mix_list_iter(group->controls, (MixIterFunc) control_update);
 }
 
 void group_increase(Group *group)
 {
-  if (group->slider != NULL)
-    control_increase(group->slider);
+  /* TODO */
 }
 
 void group_decrease(Group *group)
 {
-  if (group->slider != NULL)
-    control_decrease(group->slider);
+  /* TODO */
 }
 
 void group_mute(Group *group, int muted)
 {
-  if (group->mute != NULL)
-    control_mute(group->mute, muted);
+  /* TODO */
 }
 
 void group_draw(Group *group)
 {
-  if (group->slider != NULL)
-    control_draw(group->slider);
-  if (group->mute != NULL)
-    control_draw(group->mute);
+  mix_list_iter(group->controls, (MixIterFunc) control_draw);
 }
 
 char *group_get_name(Group *group)

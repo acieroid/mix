@@ -6,6 +6,8 @@
 #ifndef CONFIG_H
 #define CONFIG_H
 
+#define max(a,b) ((a) > (b) ? (a) : (b))
+
 #define GREEN 1
 #define WHITE 2
 #define RED 3

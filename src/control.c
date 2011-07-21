@@ -3,18 +3,23 @@
 #include "config.h"
 
 #include <assert.h>
+#include <string.h>
+#include <math.h>
 
 Control *control_new(MixExtension *ext, int x, int y, int height)
 {
   Control *control = malloc(sizeof(*control));
   assert(control != NULL);
   control->ext = ext;
+  control->width = strlen(mix_extension_get_name(ext));
   if (mix_extension_is_mute(ext)) {
-    control->win = newwin(height, MUTE_WIDTH, y, x);
+    control->width = max(control->width, MUTE_WIDTH);
+    control->win = newwin(height-2, MUTE_WIDTH, y, x + control->width/2-MUTE_WIDTH/2);
   }
   else if (mix_extension_is_slider(ext)) {
-    control->win = newwin(height, SLIDER_WIDTH, y, x);
-    box(control->win, 0, 0);
+    control->width = max(control->width, SLIDER_WIDTH);
+
+    control->win = newwin(height-2, SLIDER_WIDTH, y, x + control->width/2 - SLIDER_WIDTH/2);
   }
   control->x = x;
   control->y = y;
@@ -32,6 +37,12 @@ void control_free(Control *control)
      be handled here */
 }
 
+int control_width(Control *control)
+{
+  assert(control != NULL);
+  return control->width;
+}
+    
 void control_update(Control *control)
 {
   assert(control != NULL);
@@ -86,31 +97,35 @@ void control_draw(Control *control)
   int y, val, percent;
   MixExtension *ext;
   assert(control != NULL);
-
   ext = control->ext;
 
-  if (mix_extension_is_mute(ext)) {
-    if (mix_extension_muted(ext))
-      mvwaddch(control->win, 1, 1, MUTED_CHARACTER);
-    else
-      mvwaddch(control->win, 1, 1, UNMUTED_CHARACTER);
-  }
-  else if (mix_extension_is_slider(ext)) {
-    val = ((float) mix_extension_get_value(control->ext) /
-           (float) mix_extension_get_max_value(control->ext)) *
-      (control->height-2);
-
-    for (y = control->height-2; y > 0; y--) {
-      percent = 100 - (((float) y / (float) (control->height-2)) * 100);
-      if (y > control->height-2-val) {
-        control_set_color(control, (percent < 25) ? GREEN : ((percent > 75) ? RED : WHITE));
-        mvwaddch(control->win, y, 1, FILL_CHARACTER);
-      }
-      else {
-        control_clear_color(control);
-        mvwaddch(control->win, y, 1, CLEAR_CHARACTER);
-      }
+  if (control->win != NULL) {
+    if (mix_extension_is_mute(ext)) {
+      if (mix_extension_muted(ext))
+        mvwaddch(control->win, 1, 1, MUTED_CHARACTER);
+      else
+        mvwaddch(control->win, 1, 1, UNMUTED_CHARACTER);
     }
+    else if (mix_extension_is_slider(ext)) {
+      box(control->win, 0, 0);
+      val = ((float) mix_extension_get_value(control->ext) /
+             (float) mix_extension_get_max_value(control->ext)) *
+        (control->height-2);
+
+      for (y = control->height-4; y > 0; y--) {
+        percent = 100 - (((float) y / (float) (control->height-2)) * 100);
+        if (y > control->height-2-val) {
+          control_set_color(control, (percent < 25) ? GREEN : ((percent > 75) ? RED : WHITE));
+          mvwaddch(control->win, y, 1, FILL_CHARACTER);
+        }
+        else {
+          control_clear_color(control);
+          mvwaddch(control->win, y, 1, CLEAR_CHARACTER);
+        }
+      }
+      control_clear_color(control);
+    }
+    mvprintw(control->height-1, control->x, "%s", mix_extension_get_name(ext));
+    wrefresh(control->win);
   }
-  wrefresh(control->win);
 }

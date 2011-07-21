@@ -13,8 +13,7 @@
 typedef struct {
   WINDOW *win;
   MixGroup *group;
-  Control *mute;
-  Control *slider;
+  MixList *controls;
 } Group;
 
 /**

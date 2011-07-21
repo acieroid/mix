@@ -35,7 +35,10 @@ int main(int argc, char *argv[])
 
   while (ch != QUIT_KEY) {
     ch = getch();
+    clear();
     manager_key_pressed(manager, ch);
+    manager_draw(manager);
+    refresh();
     manager_draw(manager);
   }
 

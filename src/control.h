@@ -16,6 +16,7 @@ typedef struct {
   MixExtension *ext;
   int x;
   int y;
+  int width;
   int height;
 } Control;
 
@@ -28,6 +29,11 @@ Control *control_new(MixExtension *ext, int x, int y, int height);
  * free a control
  */
 void control_free(Control *control);
+
+/**
+ * return the width of this control
+ */
+int control_width(Control *control);
 
 /**
  * Update the value of a control
