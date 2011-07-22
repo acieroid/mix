@@ -11,9 +11,11 @@
 #include <libmix.h>
 
 typedef struct {
-  WINDOW *win;
   MixGroup *group;
+  MixList *groups;
   MixList *controls;
+  int x, y;
+  int width, height;
 } Group;
 
 /**

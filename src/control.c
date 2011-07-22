@@ -125,7 +125,8 @@ void control_draw(Control *control)
       }
       control_clear_color(control);
     }
-    mvprintw(control->height-1, control->x, "%s", mix_extension_get_name(ext));
+    mvprintw(control->y + control->height-1, control->x,
+             "%s", mix_extension_get_name(ext));
     wrefresh(control->win);
   }
 }
