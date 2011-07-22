@@ -23,7 +23,7 @@ typedef struct {
 /**
  * @return a newly allocated manager
  */
-Manager *manager_new(MixMixer *mixer);
+Manager *manager_new(MixMixer *mixer, int x, int y, int height);
 
 /**
  * Free a manager

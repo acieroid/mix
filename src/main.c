@@ -59,7 +59,8 @@ int main(int argc, char *argv[])
   fd = mix_open_dev("/dev/mixer");
   mixers = mix_get_mixers(fd);
   mix_foreach(iterator, mixers) {
-    managers = mix_list_prepend(managers, manager_new(iterator->data));
+    managers = mix_list_prepend(managers,
+                                manager_new(iterator->data, 0, 1, LINES-1));
     if (selected == NULL)
       selected = managers->data; /* select the first mixer */
   }

@@ -6,7 +6,7 @@
 #include <assert.h>
 
 #include <stdio.h>
-Manager *manager_new(MixMixer *mixer)
+Manager *manager_new(MixMixer *mixer, int x, int y, int height)
 {
   MixList *iterator;
   Group *group;
@@ -18,7 +18,7 @@ Manager *manager_new(MixMixer *mixer)
   manager->selected = NULL;
   mix_foreach(iterator, mix_mixer_get_groups(mixer)) {
     printw("alo");
-    group = group_new(iterator->data, 0, 1, LINES-1);
+    group = group_new(iterator->data, x, y, height);
     if (manager->selected == NULL)
       manager->selected = group; /* select the first group */
     manager->groups = mix_list_prepend(manager->groups, (void *) group);
