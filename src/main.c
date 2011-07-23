@@ -20,32 +20,12 @@ void exit_ncurses()
 
 Manager *next_manager(MixList *list, Manager *selected)
 {
-  MixList *iterator;
-  mix_foreach(iterator, list) {
-    if (list->data == selected) {
-      if (list->next == NULL)
-        return selected; /* already at right-most element */
-      else
-        return list->next->data;
-    }
-  }
-  return selected; /* we shouldn't be here */
+  return mix_list_select_right(list, (void *) selected);
 }
 
 Manager *prev_manager(MixList *list, Manager *selected)
 {
-  MixList *iterator = NULL;
-  Manager *prev = NULL;
-  mix_foreach(iterator, list) {
-    if (list->data == selected) {
-      if (prev == NULL)
-        return selected; /* already at left-most element */
-      else
-        return prev;
-    }
-    prev = iterator->data;
-  }
-  return selected; /* we shouldn't be here neither */
+  return mix_list_select_left(list, (void *) selected);
 }
 
 int main(int argc, char *argv[])

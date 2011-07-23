@@ -38,34 +38,16 @@ void manager_free(Manager *manager)
 
 void manager_select_left(Manager *manager)
 {
-  MixList *iterator;
-  Group *prev = NULL;
   assert(manager != NULL);
-  mix_foreach(iterator, manager->groups) {
-    if (iterator->data == manager->selected) {
-      if (prev == NULL)
-        return; /* the most-left element is already selected */
-      else
-        manager->selected = prev;
-      break;
-    }
-    prev = iterator->data;
-  }
+  manager->selected = mix_list_select_left(manager->groups,
+                                           (void *) manager->selected);
 }
 
 void manager_select_right(Manager *manager)
 {
-  MixList *iterator;
   assert(manager != NULL);
-  mix_foreach(iterator, manager->groups) {
-    if (iterator->data == manager->selected) {
-      if (iterator->next == NULL)
-        return; /* the most-right element is already selected */
-      else
-        manager->selected = iterator->next->data;
-      break;
-    }
-  }
+  manager->selected = mix_list_select_right(manager->groups,
+                                            (void *) manager->selected);
 }
 
 void manager_key_pressed(Manager *manager, int key)
