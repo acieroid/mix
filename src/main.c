@@ -11,6 +11,7 @@ void init_ncurses()
   cbreak();
   keypad(stdscr, TRUE);
   noecho();
+  curs_set(0); /* cursor invisible */
 }
 
 void exit_ncurses()
