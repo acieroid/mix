@@ -14,6 +14,7 @@ typedef struct {
   MixGroup *group;
   MixList *groups;
   MixList *controls;
+  struct Group *selected;
   int x, y;
   int width, height;
 } Group;
@@ -52,6 +53,31 @@ void group_mute(Group *group, int muted);
  * Unmute the mute element of a group
  */
 void group_unmute(Group *group);
+
+/**
+ * Start selecting subgroups
+ */
+void group_start_select(Group *group);
+
+/**
+ * Don't select anything
+ */
+void group_stop_select(Group *group);
+
+/**
+ * Select the left subgroup
+ */
+void group_select_left(Group *group);
+
+/**
+ * Select the right subgroup
+ */
+void group_select_right(Group *group);
+
+/**
+ * Handle a key press
+ */
+void group_key_pressed(Group *group, int key);
 
 /**
  * Draw a group

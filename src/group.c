@@ -33,6 +33,7 @@ Group *group_new(MixGroup *mixgroup, int x, int y, int height)
   group->y = y;
   group->height = height;
   group->width = most_right_x;
+  group->selected = NULL;
 
   return group;
 }
@@ -66,6 +67,44 @@ void group_mute(Group *group, int muted)
   /* TODO */
 }
 
+void group_start_select(Group *group)
+{
+  assert(group != NULL);
+  group->selected = group->groups->data;
+}
+
+void group_stop_select(Group *group)
+{
+  assert(group != NULL);
+  group->selected = NULL;
+}
+
+void group_select_left(Group *group)
+{
+  assert(group != NULL);
+  group->selected = (Group *) mix_list_select_left(group->groups,
+                                                   (void *) group->selected);
+}
+
+void group_select_right(Group *group)
+{
+  assert(group != NULL);
+  group->selected = (Group *) mix_list_select_right(group->groups,
+                                                    (void *) group->selected);
+}
+
+void group_key_pressed(Group *group, int key)
+{
+  switch (key) {
+  case SELECT_LEFT_KEY:
+    group_select_left(group);
+    break;
+  case SELECT_RIGHT_KEY:
+    group_select_right(group);
+    break;
+  }
+}
+
 void group_draw(Group *group)
 {
   MixList *iterator;
@@ -74,7 +113,11 @@ void group_draw(Group *group)
   /* draw the list of sub-groups */
   move(group->y, group->x);
   mix_foreach(iterator, group->groups) {
+    if (iterator->data == group->selected)
+      attron(A_BOLD);
     printw("%s", group_get_name(iterator->data));
+    if (iterator->data == group->selected)
+      attroff(A_BOLD);
     if (iterator->next != NULL)
       printw(" - ");
   }
