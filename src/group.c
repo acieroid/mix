@@ -86,6 +86,7 @@ int group_select_up(Group *group)
     return 1;
   if (group_select_up((Group *) group->selected))
     group->selected = NULL;
+  return 0;
 }
 
 void group_select_left(Group *group)
