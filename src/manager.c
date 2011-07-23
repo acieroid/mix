@@ -85,11 +85,12 @@ void manager_key_pressed(Manager *manager, int key)
       manager_select_right(manager);
     break;
   case SELECT_DOWN_KEY:
-    group_select_down(manager->selected);
-    manager->in_group_select = 1;
+    manager->in_group_select = group_select_down(manager->selected);
     break;
   case SELECT_UP_KEY:
     manager->in_group_select = group_select_up(manager->selected);
+    if (manager->in_group_select == 2)
+      manager->in_group_select = 0;
     break;
 #if 0
   case INCREASE_KEY:

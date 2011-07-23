@@ -56,12 +56,15 @@ void group_unmute(Group *group);
 
 /**
  * Select subgroup
+ * @return 1 if we're now selecting subgroups
  */
-void group_select_down(Group *group);
+int group_select_down(Group *group);
 
 /**
  * Unselect ungroup
- * @return 1 if there's no more parent groups
+ * @return 1 if we're still selecting subgroups
+ * @return 2 if we rightfully selected up (should be handled
+ * differently if this is the main parent group)
  */
 int group_select_up(Group *group);
 

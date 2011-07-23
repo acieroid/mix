@@ -67,7 +67,7 @@ void group_mute(Group *group, int muted)
   /* TODO */
 }
 
-void group_select_down(Group *group)
+int group_select_down(Group *group)
 {
   assert(group != NULL);
   /* if the group has no subgroups there's no reason to select down */
@@ -76,17 +76,22 @@ void group_select_down(Group *group)
       group->selected = group->groups->data;
     else
       group_select_down((Group *) group->selected);
+    return 1;
   }
+  return 0;
 }
 
 int group_select_up(Group *group)
 {
   assert(group != NULL);
   if (group->selected == NULL)
+    return 0;
+  else if (group_select_up((Group *) group->selected))
     return 1;
-  if (group_select_up((Group *) group->selected))
+  else {
     group->selected = NULL;
-  return 0;
+    return 2;
+  }
 }
 
 void group_select_left(Group *group)
