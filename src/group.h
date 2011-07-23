@@ -55,14 +55,15 @@ void group_mute(Group *group, int muted);
 void group_unmute(Group *group);
 
 /**
- * Start selecting subgroups
+ * Select subgroup
  */
-void group_start_select(Group *group);
+void group_select_down(Group *group);
 
 /**
- * Don't select anything
+ * Unselect ungroup
+ * @return 1 if there's no more parent groups
  */
-void group_stop_select(Group *group);
+int group_select_up(Group *group);
 
 /**
  * Select the left subgroup

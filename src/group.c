@@ -67,30 +67,39 @@ void group_mute(Group *group, int muted)
   /* TODO */
 }
 
-void group_start_select(Group *group)
+void group_select_down(Group *group)
 {
   assert(group != NULL);
-  group->selected = group->groups->data;
+  /* if the group has no subgroups there's no reason to select down */
+  if (group->groups != NULL) {
+    if (group->selected == NULL)
+      group->selected = group->groups->data;
+    else
+      group_select_down((Group *) group->selected);
+  }
 }
 
-void group_stop_select(Group *group)
+int group_select_up(Group *group)
 {
   assert(group != NULL);
-  group->selected = NULL;
+  if (group->selected == NULL)
+    return 1;
+  if (group_select_up((Group *) group->selected))
+    group->selected = NULL;
 }
 
 void group_select_left(Group *group)
 {
   assert(group != NULL);
-  group->selected = (Group *) mix_list_select_left(group->groups,
-                                                   (void *) group->selected);
+  group->selected = (struct Group *) mix_list_select_left(group->groups,
+                                                          (void *) group->selected);
 }
 
 void group_select_right(Group *group)
 {
   assert(group != NULL);
-  group->selected = (Group *) mix_list_select_right(group->groups,
-                                                    (void *) group->selected);
+  group->selected = (struct Group *) mix_list_select_right(group->groups,
+                                                           (void *) group->selected);
 }
 
 void group_key_pressed(Group *group, int key)
@@ -121,8 +130,10 @@ void group_draw(Group *group)
     if (iterator->next != NULL)
       printw(" - ");
   }
-  
-  if (group->controls != NULL) /* if the groups has controls */
+
+  if (group->selected != NULL)
+    group_draw((Group *) group->selected);
+  else if (group->controls != NULL) /* if the groups has controls */
     mix_list_iter(group->controls, (MixIterFunc) control_draw);
 }
 

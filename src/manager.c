@@ -25,6 +25,8 @@ Manager *manager_new(MixMixer *mixer, int x, int y, int height)
   }
   manager->groups = mix_list_reverse(manager->groups);
 
+  manager->in_group_select = 0;
+
   return manager;
 }
 
@@ -71,17 +73,32 @@ void manager_key_pressed(Manager *manager, int key)
   assert(manager != NULL);
   switch (key) {
   case SELECT_LEFT_KEY:
-    manager_select_left(manager);
+    if (manager->in_group_select)
+      group_select_left(manager->selected);
+    else
+      manager_select_left(manager);
     break;
   case SELECT_RIGHT_KEY:
-    manager_select_right(manager);
+    if (manager->in_group_select)
+      group_select_right(manager->selected);
+    else
+      manager_select_right(manager);
     break;
+  case SELECT_DOWN_KEY:
+    group_select_down(manager->selected);
+    manager->in_group_select = 1;
+    break;
+  case SELECT_UP_KEY:
+    manager->in_group_select = group_select_up(manager->selected);
+    break;
+#if 0
   case INCREASE_KEY:
     group_increase(manager->selected);
     break;
   case DECREASE_KEY:
     group_decrease(manager->selected);
     break;
+#endif
   default:
     break;
   }

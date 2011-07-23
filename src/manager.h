@@ -18,6 +18,7 @@
 typedef struct {
   MixList *groups;
   Group *selected;
+  int in_group_select;
 } Manager;
 
 /**
