@@ -97,15 +97,22 @@ int group_select_up(Group *group)
 void group_select_left(Group *group)
 {
   assert(group != NULL);
-  group->selected = (struct Group *) mix_list_select_left(group->groups,
-                                                          (void *) group->selected);
+  if (group_has_selected(group->selected))
+    group_select_left(group->selected);
+  else
+    group->selected = mix_list_select_left(group->groups,
+                                           (void *) group->selected);
 }
 
 void group_select_right(Group *group)
 {
   assert(group != NULL);
-  group->selected = (struct Group *) mix_list_select_right(group->groups,
-                                                           (void *) group->selected);
+  assert(group->selected != NULL);
+  if (group_has_selected(group->selected))
+    group_select_right(group->selected);
+  else
+    group->selected = mix_list_select_right(group->groups,
+                                            (void *) group->selected);
 }
 
 void group_key_pressed(Group *group, int key)
@@ -147,4 +154,10 @@ char *group_get_name(Group *group)
 {
   assert(group != NULL);
   return mix_group_get_name(group->group);
+}
+
+int group_has_selected(Group *group)
+{
+  assert(group != NULL);
+  return group->selected != NULL;
 }

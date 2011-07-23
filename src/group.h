@@ -10,7 +10,7 @@
 #include <ncurses.h>
 #include <libmix.h>
 
-typedef struct {
+typedef struct Group {
   MixGroup *group;
   MixList *groups;
   MixList *controls;
@@ -93,5 +93,8 @@ void group_draw(Group *group);
  */
 char *group_get_name(Group *group);
 
-
+/**
+ * @return 1 if the group has something selected
+ */
+int group_has_selected(Group *group);
 #endif
