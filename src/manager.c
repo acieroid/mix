@@ -74,7 +74,7 @@ void manager_key_pressed(Manager *manager, int key)
     break;
   case SELECT_UP_KEY:
     if (group_has_control_selected(manager->selected)) {
-      group_decrease(manager->selected);
+      group_increase(manager->selected);
     }
     else {
       manager->in_group_select = group_select_up(manager->selected);
