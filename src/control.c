@@ -24,6 +24,7 @@ Control *control_new(MixExtension *ext, int x, int y, int height)
   control->x = x;
   control->y = y;
   control->height = height;
+  control->selected = 0;
   return control;
 }
 
@@ -80,6 +81,18 @@ void control_mute(Control *control, int muted)
   mix_extension_set_muted(control->ext, muted);
 }
 
+void control_select(Control *control)
+{
+  assert(control != NULL);
+  control->selected = 1;
+}
+
+void control_unselect(Control *control)
+{
+  assert(control != NULL);
+  control->selected = 0;
+}
+
 void control_set_color(Control *control, int color)
 {
   assert(control != NULL);
@@ -125,8 +138,14 @@ void control_draw(Control *control)
       }
       control_clear_color(control);
     }
+
+    if (control->selected)
+      attron(A_BOLD);
     mvprintw(control->y + control->height-1, control->x,
              "%s", mix_extension_get_name(ext));
+    if (control->selected)
+      attroff(A_BOLD);
+
     wrefresh(control->win);
   }
 }

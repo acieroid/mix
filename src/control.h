@@ -18,6 +18,7 @@ typedef struct {
   int y;
   int width;
   int height;
+  int selected;
 } Control;
 
 /**
@@ -59,6 +60,16 @@ void control_decrease(Control *control);
  * Set the mute value of a control (1 = muted, 2 = unmuted)
  */
 void control_mute(Control *control, int muted);
+
+/**
+ * Select the control
+ */
+void control_select(Control *control);
+
+/**
+ * Unselect the control
+ */
+void control_unselect(Control *control);
 
 /**
  * Set a current color for the control

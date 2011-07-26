@@ -54,12 +54,16 @@ void group_update(Group *group)
 
 void group_increase(Group *group)
 {
-  /* TODO */
+  assert(group != NULL);
+  if (group_has_control_selected(group))
+    control_increase(group->control_selected);
 }
 
 void group_decrease(Group *group)
 {
-  /* TODO */
+  assert(group != NULL);
+  if (group_has_control_selected(group))
+    control_decrease(group->control_selected);
 }
 
 void group_mute(Group *group, int muted)
@@ -97,22 +101,59 @@ int group_select_up(Group *group)
 void group_select_left(Group *group)
 {
   assert(group != NULL);
-  if (group_has_selected(group->selected))
-    group_select_left(group->selected);
-  else
-    group->selected = mix_list_select_left(group->groups,
-                                           (void *) group->selected);
+  if (group_has_control_selected(group)) {
+    /* select the left control */
+    group->control_selected = mix_list_select_left(group->controls,
+                                                   (void *) group->control_selected);
+  }
+  else {
+    /* select the left subgroup */
+    assert(group->selected != NULL);
+    if (group_has_group_selected(group->selected))
+      group_select_left(group->selected);
+    else
+      group->selected = mix_list_select_left(group->groups,
+                                             (void *) group->selected);
+  }
 }
 
 void group_select_right(Group *group)
 {
   assert(group != NULL);
-  assert(group->selected != NULL);
-  if (group_has_selected(group->selected))
-    group_select_right(group->selected);
-  else
-    group->selected = mix_list_select_right(group->groups,
-                                            (void *) group->selected);
+  if (group_has_control_selected(group)) {
+    /* select the right control */
+    group->control_selected = mix_list_select_right(group->controls,
+                                                    (void *) group->control_selected);
+  }
+  else {
+    /* select the right subgroup */
+    assert(group->selected != NULL);
+    if (group_has_group_selected(group->selected))
+      group_select_right(group->selected);
+    else
+      group->selected = mix_list_select_right(group->groups,
+                                              (void *) group->selected);
+  }
+}
+
+void group_select_control(Group *group)
+{
+  assert(group != NULL);
+  /* don't select if there are no controls or if there's already a
+     control selected */
+  if (group->controls != NULL && !group_has_control_selected(group)) {
+    group->control_selected = group->controls->data;
+    control_select(group->control_selected);
+  }
+}
+
+void group_unselect_control(Group *group)
+{
+  assert(group != NULL);
+  if (group_has_control_selected(group)) {
+    control_unselect(group->control_selected);
+    group->control_selected = NULL;
+  }
 }
 
 void group_key_pressed(Group *group, int key)
@@ -156,8 +197,14 @@ char *group_get_name(Group *group)
   return mix_group_get_name(group->group);
 }
 
-int group_has_selected(Group *group)
+int group_has_group_selected(Group *group)
 {
   assert(group != NULL);
   return group->selected != NULL;
+}
+
+int group_has_control_selected(Group *group)
+{
+  assert(group != NULL);
+  return group->control_selected != NULL;
 }

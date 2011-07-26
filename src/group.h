@@ -15,6 +15,7 @@ typedef struct Group {
   MixList *groups;
   MixList *controls;
   struct Group *selected;
+  Control *control_selected;
   int x, y;
   int width, height;
 } Group;
@@ -69,14 +70,24 @@ int group_select_down(Group *group);
 int group_select_up(Group *group);
 
 /**
- * Select the left subgroup
+ * Select the left subgroup or control
  */
 void group_select_left(Group *group);
 
 /**
- * Select the right subgroup
+ * Select the right subgroup or control
  */
 void group_select_right(Group *group);
+
+/**
+ * Select the first group's control
+ */
+void group_select_control(Group *group);
+
+/**
+ * Unselect the selected control
+ */
+void group_unselect_control(Group *group);
 
 /**
  * Handle a key press
@@ -94,7 +105,13 @@ void group_draw(Group *group);
 char *group_get_name(Group *group);
 
 /**
- * @return 1 if the group has something selected
+ * @return 1 if the group has a group something selected
  */
-int group_has_selected(Group *group);
+int group_has_group_selected(Group *group);
+
+/**
+ * @return 1 if the group has a control selected
+ */
+int group_has_control_selected(Group *group);
+
 #endif

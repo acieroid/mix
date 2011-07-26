@@ -33,5 +33,7 @@
 #define SELECT_DOWN_KEY KEY_DOWN
 #define NEXT_MIXER_KEY KEY_F(2)
 #define PREV_MIXER_KEY KEY_F(1)
+#define SELECT_CONTROL_KEY 10 /* enter key */
+#define UNSELECT_CONTROL_KEY 127 /* backspace key */
 
 #endif /* CONFIG_H */
