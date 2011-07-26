@@ -8,6 +8,7 @@
 
 Control *control_new(MixExtension *ext, int x, int y, int height)
 {
+  int i;
   Control *control = malloc(sizeof(*control));
   assert(control != NULL);
   control->ext = ext;
@@ -20,6 +21,11 @@ Control *control_new(MixExtension *ext, int x, int y, int height)
     control->width = max(control->width, SLIDER_WIDTH);
 
     control->win = newwin(height-2, SLIDER_WIDTH, y, x + control->width/2 - SLIDER_WIDTH/2);
+  }
+  else if (mix_extension_is_enum(ext)) {
+    for (i = 0; i < mix_extension_get_max_value(ext); i++)
+      control->width = max(control->width,
+                           strlen(mix_extension_get_enum_values(ext)[i]));
   }
   control->x = x;
   control->y = y;
