@@ -56,13 +56,17 @@ void group_update(Group *group)
 void group_increase(Group *group)
 {
   assert(group != NULL);
-  if (group_has_control_selected(group))
+  if (group_has_group_selected(group))
+    group_increase(group->selected);
+  else if (group_has_control_selected(group))
     control_increase(group->control_selected);
 }
 
 void group_decrease(Group *group)
 {
   assert(group != NULL);
+  if (group_has_group_selected(group))
+    group_decrease(group->selected);
   if (group_has_control_selected(group))
     control_decrease(group->control_selected);
 }
@@ -77,10 +81,15 @@ int group_select_down(Group *group)
   assert(group != NULL);
   /* if the group has no subgroups there's no reason to select down */
   if (group->groups != NULL) {
-    if (group->selected == NULL)
+    if (group->selected == NULL) {
       group->selected = group->groups->data;
-    else
-      group_select_down((Group *) group->selected);
+    }
+    else {
+      if (group_has_control_selected(group->selected))
+        group_increase(group);
+      else
+        group_select_down((Group *) group->selected);
+    }
     return 1;
   }
   return 0;
@@ -89,13 +98,21 @@ int group_select_down(Group *group)
 int group_select_up(Group *group)
 {
   assert(group != NULL);
-  if (group->selected == NULL)
+  if (group->selected == NULL) {
     return 0;
-  else if (group_select_up((Group *) group->selected))
-    return 1;
+  }
   else {
-    group->selected = NULL;
-    return 2;
+    if (group_has_control_selected(group->selected)) {
+      group_increase(group->selected);
+      return 1;
+    }
+    else if (group_select_up((Group *) group->selected)) {
+      return 1;
+    }
+    else {
+      group->selected = NULL;
+      return 2;
+    }
   }
 }
 
@@ -112,7 +129,8 @@ void group_select_left(Group *group)
   else {
     /* select the left subgroup */
     assert(group->selected != NULL);
-    if (group_has_group_selected(group->selected))
+    if (group_has_group_selected(group->selected) ||
+        group_has_control_selected(group->selected))
       group_select_left(group->selected);
     else
       group->selected = mix_list_select_left(group->groups,
@@ -133,7 +151,8 @@ void group_select_right(Group *group)
   else {
     /* select the right subgroup */
     assert(group->selected != NULL);
-    if (group_has_group_selected(group->selected))
+    if (group_has_group_selected(group->selected) ||
+        group_has_control_selected(group->selected))
       group_select_right(group->selected);
     else
       group->selected = mix_list_select_right(group->groups,
@@ -144,9 +163,12 @@ void group_select_right(Group *group)
 void group_select_control(Group *group)
 {
   assert(group != NULL);
-  /* don't select if there are no controls or if there's already a
-     control selected */
-  if (group->controls != NULL && !group_has_control_selected(group)) {
+  if (group_has_group_selected(group)) {
+    group_select_control(group->selected);
+  }
+  else if (group->controls != NULL && !group_has_control_selected(group)) {
+    /* don't select if there are no controls or if there's already a
+       control selected */
     group->control_selected = group->controls->data;
     control_select(group->control_selected);
   }
@@ -155,7 +177,10 @@ void group_select_control(Group *group)
 void group_unselect_control(Group *group)
 {
   assert(group != NULL);
-  if (group_has_control_selected(group)) {
+  if (group_has_group_selected(group)) {
+    group_unselect_control(group->selected);
+  }
+  else if (group_has_control_selected(group)) {
     control_unselect(group->control_selected);
     group->control_selected = NULL;
   }
