@@ -84,9 +84,11 @@ void manager_key_pressed(Manager *manager, int key)
     break;
   case SELECT_CONTROL_KEY:
     group_select_control(manager->selected);
+    manager->in_group_select = 1;
     break;
   case UNSELECT_CONTROL_KEY:
     group_unselect_control(manager->selected);
+    manager->in_group_select = 0;
     break;
   default:
     break;

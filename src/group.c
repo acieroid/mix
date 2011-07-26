@@ -34,6 +34,7 @@ Group *group_new(MixGroup *mixgroup, int x, int y, int height)
   group->height = height;
   group->width = most_right_x;
   group->selected = NULL;
+  group->control_selected = NULL;
 
   return group;
 }
@@ -103,8 +104,10 @@ void group_select_left(Group *group)
   assert(group != NULL);
   if (group_has_control_selected(group)) {
     /* select the left control */
+    control_unselect(group->control_selected);
     group->control_selected = mix_list_select_left(group->controls,
                                                    (void *) group->control_selected);
+    control_select(group->control_selected);
   }
   else {
     /* select the left subgroup */
@@ -122,8 +125,10 @@ void group_select_right(Group *group)
   assert(group != NULL);
   if (group_has_control_selected(group)) {
     /* select the right control */
+    control_unselect(group->control_selected);
     group->control_selected = mix_list_select_right(group->controls,
                                                     (void *) group->control_selected);
+    control_select(group->control_selected);
   }
   else {
     /* select the right subgroup */
