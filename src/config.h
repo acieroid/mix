@@ -13,7 +13,7 @@
 #define RED 3
 
 #define MUTE_WIDTH 5
-#define SLIDER_WIDTH 3
+#define SLIDER_WIDTH 4
 #define GROUP_WIDTH 5
 
 #define FILL_CHARACTER ACS_CKBOARD

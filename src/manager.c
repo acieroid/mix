@@ -17,7 +17,6 @@ Manager *manager_new(MixMixer *mixer, int x, int y, int height)
   manager->groups = NULL;
   manager->selected = NULL;
   mix_foreach(iterator, mix_mixer_get_groups(mixer)) {
-    printw("alo");
     group = group_new(iterator->data, x, y, height);
     if (manager->selected == NULL)
       manager->selected = group; /* select the first group */
