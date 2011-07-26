@@ -15,7 +15,7 @@ Control *control_new(MixExtension *ext, int x, int y, int height)
   control->width = strlen(mix_extension_get_name(ext));
   if (mix_extension_is_mute(ext)) {
     control->width = max(control->width, MUTE_WIDTH);
-    control->win = newwin(height-2, MUTE_WIDTH, y, x + control->width/2-MUTE_WIDTH/2);
+    control->win = newwin(height-2, MUTE_WIDTH, y, x + control->width/2 - MUTE_WIDTH/2);
   }
   else if (mix_extension_is_slider(ext)) {
     control->width = max(control->width, SLIDER_WIDTH);
@@ -25,7 +25,9 @@ Control *control_new(MixExtension *ext, int x, int y, int height)
   else if (mix_extension_is_enum(ext)) {
     for (i = 0; i < mix_extension_get_max_value(ext); i++)
       control->width = max(control->width,
-                           strlen(mix_extension_get_enum_values(ext)[i]));
+                           strlen(mix_extension_get_enum_values(ext)[i]) + 2);
+    control->win = newwin(mix_extension_get_max_value(ext) + 2, control->width,
+                          height - mix_extension_get_max_value(ext) - 2, x);
   }
   control->x = x;
   control->y = y;
@@ -155,7 +157,19 @@ void control_draw(Control *control)
       }
       control_clear_color(control);
     }
-
+    else if (mix_extension_is_enum(ext)) {
+      box(control->win, 0, 0);
+      //y = control->height/2 - mix_extension_get_max_value(ext)/2;
+      for (y = 0; y < mix_extension_get_max_value(ext); y++) {
+        if (strcmp(mix_extension_get_enum_values(ext)[y],
+                   mix_extension_get_enum_value(ext)) == 0)
+          wattron(control->win, A_REVERSE);
+        mvwprintw(control->win, y+1,
+                  control->width/2 - strlen(mix_extension_get_enum_value(ext))/2 - 2,
+                  "%s", mix_extension_get_enum_values(ext)[y]);
+        wattroff(control->win, A_REVERSE);
+      }
+    }
     if (control->selected)
       attron(A_BOLD);
     mvprintw(control->y + control->height-1, control->x,
