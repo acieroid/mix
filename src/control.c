@@ -159,7 +159,6 @@ void control_draw(Control *control)
     }
     else if (mix_extension_is_enum(ext)) {
       box(control->win, 0, 0);
-      //y = control->height/2 - mix_extension_get_max_value(ext)/2;
       for (y = 0; y < mix_extension_get_max_value(ext); y++) {
         if (strcmp(mix_extension_get_enum_values(ext)[y],
                    mix_extension_get_enum_value(ext)) == 0)

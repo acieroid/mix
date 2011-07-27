@@ -86,7 +86,7 @@ int group_select_down(Group *group)
     }
     else {
       if (group_has_control_selected(group->selected))
-        group_increase(group);
+        group_decrease(group);
       else
         group_select_down((Group *) group->selected);
     }
