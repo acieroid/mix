@@ -163,8 +163,10 @@ void control_draw(Control *control)
         if (strcmp(mix_extension_get_enum_values(ext)[y],
                    mix_extension_get_enum_value(ext)) == 0)
           wattron(control->win, A_REVERSE);
+        x = control->width/2 - strlen(mix_extension_get_enum_values(ext)[y])/2;
+        /* draw in the reverse order */
         mvwprintw(control->win, y+1,
-                  control->width/2 - strlen(mix_extension_get_enum_value(ext))/2 - 2,
+                  max(x, 1),
                   "%s", mix_extension_get_enum_values(ext)[y]);
         wattroff(control->win, A_REVERSE);
       }
