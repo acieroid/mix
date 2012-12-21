@@ -21,8 +21,9 @@
 #define MUTED_CHARACTER 'M'
 #define UNMUTED_CHARACTER 'U'
 
-#define INCREASE_STEP 1
-#define DECREASE_STEP -1
+/* TODO: enum shouldn't use those steps */
+#define INCREASE_STEP 5
+#define DECREASE_STEP -5
 
 #define QUIT_KEY 'q'
 #define INCREASE_KEY KEY_UP
